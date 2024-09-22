@@ -18,19 +18,19 @@ const Theme = () => {
   ];
   const {mode, setMode} = useTheme();
   return (
-    <Menubar className='relative border-none shadow-none bg-transparent'>
+    <Menubar className='relative shadow-none border-none bg-transparent'>
         <MenubarMenu>
-            <MenubarTrigger className='border-0 outline-none shadow-none background-light900_dark300 h-[30px]'>
+            <MenubarTrigger className='outline-none shadow-none bg-red-700 h-[30px]'>
                 {
                     mode === 'light' ? (
                         <Image src="/icons/sun.svg"
-                        width={20} height={20} className='active-theme border-none' 
-                        style={{ minWidth: '20px', minHeight: '20px', width: '20px', height: '20px' }}
+                        width={30} height={30} className='active-theme border-none' 
+                        style={{ minWidth: '20px', minHeight: '20px'}}
                         alt='light'/>
                     ): (
                         <Image src="/icons/moon.svg" 
-                        width={20} height={20} 
-                        style={{ minWidth: '20px', minHeight: '20px', width: '20px', height: '20px' }}
+                        width={30} height={30} 
+                        style={{ minWidth: '20px', minHeight: '20px'}}
                         className='active-theme border-none' alt='dark' /> 
                     )
                 }
