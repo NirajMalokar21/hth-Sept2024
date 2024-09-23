@@ -8,7 +8,7 @@ export async function getAllRequirements() {
 export async function getAllPreReqNodesbyNode(name: string) {
     return await prisma.node.findMany({
         where: {
-            requires: {
+            requiredBy: {
                 some: {
                     Node: {
                         name,
