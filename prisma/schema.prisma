@@ -19,7 +19,7 @@ model Node {
   description String
   requires    Requires[] @relation("NodeRequiresPreReqNode")
   requiredBy  Requires[] @relation("PreReqNodeRequiredByNode")
-  has         Has[]      @relation("ThemeHasNode")
+  hadBy         Has[]      @relation("ThemeHasNode")
   completedBy  Completed[] @relation("UserCompletedNode")
 
   @@map("nodes")
