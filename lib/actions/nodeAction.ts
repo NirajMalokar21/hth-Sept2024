@@ -1,6 +1,5 @@
 import prisma from "../prisma";
 
-//Get functions
 export async function getAllNodes() {
     return await prisma.node.findMany();
 }
