@@ -1,5 +1,6 @@
 import prisma from "../prisma";
 
+//Get functions
 export async function getAllNodes() {
     return await prisma.node.findMany();
 }
@@ -19,5 +20,19 @@ export async function getNodeByTitle(name: string) {
 export async function getNodeByDescription(description: string) {
     return await prisma.node.findMany({
         where: { description },
+    });
+}
+
+//Create functions
+export async function createNode(data: { id: number; name: string; description: string }) {
+    return await prisma.node.create({
+        data,
+    });
+}
+
+//Delete functions
+export async function deleteNodeById(id: number) {
+    return await prisma.node.delete({
+        where: { id },
     });
 }

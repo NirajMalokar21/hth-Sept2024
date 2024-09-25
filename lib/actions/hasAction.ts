@@ -31,3 +31,10 @@ export async function getNodesByTheme(name: string) {
         },
     });
 }
+
+//Create functions
+export async function createHas(data: { theme_id: number; NodeId: number; node_id: number }) {
+    return await prisma.has.create({
+        data,
+    });
+}
