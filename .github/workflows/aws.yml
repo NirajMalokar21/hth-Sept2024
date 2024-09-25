@@ -34,10 +34,11 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_HOST }} "
-          cd ${{ env.APP_DIR }} && 
-          git pull origin main && 
-          npm i && 
-          npm run build && 
-          pm2 delete all && 
-          pm2 start npm --name "my-nextjs-app" -- start -- --port 8000
+          cd ${{ env.APP_DIR }} &&
+          git fetch origin &&
+          git reset --hard origin/main &&  # Force sync with the remote main branch
+          npm install &&  # Use npm install instead of npm i for clarity
+          npm run build &&
+          pm2 delete all &&
+          pm2 start npm --name 'my-nextjs-app' -- start -- --port 8000
         "
