@@ -8,7 +8,7 @@ export async function getAllRequirements() {
 export async function getAllPreReqNodesbyNode(name: string) {
     return await prisma.node.findMany({
         where: {
-            requiredBy: {
+            requires: {
                 some: {
                     Node: {
                         name,
@@ -23,13 +23,27 @@ export async function getAllPreReqNodesbyNode(name: string) {
 export async function getAllNodesRequiredByPreReqNode(name: string) {
     return await prisma.node.findMany({
         where: {
-            requires: {
+            requiredBy: {
                 some: {
-                    Node: {
+                    PreReqNode: {
                         name,
                     },
                 },
             },
         },
+    });
+}
+
+//Create function
+export async function createRequires(data: { node_id: number; pre_req_node_id: number }) {
+    return await prisma.requires.create({
+        data,
+    });
+}
+
+//Delete function
+export async function deleteRequires(data: { node_id: number; pre_req_node_id: number }) {
+    return await prisma.requires.deleteMany({
+        where: data,
     });
 }
