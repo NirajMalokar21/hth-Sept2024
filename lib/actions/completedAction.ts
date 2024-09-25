@@ -32,3 +32,17 @@ export async function getNodesByUser(name: string) {
         },
     });
 }
+
+//create a new completed node
+export async function createCompleted(data: { user_id: number; node_id: number; grade: number }) {
+    return await prisma.completed.create({
+        data,
+    });
+}
+
+//delete a completed node
+export async function deleteCompleted(data: { user_id: number; node_id: number; grade: number }) {
+    return await prisma.completed.deleteMany({
+        where: data,
+    });
+}
