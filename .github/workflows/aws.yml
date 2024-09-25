@@ -1,0 +1,43 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  EC2_HOST: 18.234.111.33                  # Set your EC2 instance IP address
+  EC2_USER: ubuntu                         # Change the username if needed
+  APP_DIR: /home/ubuntu/hth-Sept2024       # Path to your application directory
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: |
+          ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Check added keys
+      run: ssh-add -l
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_HOST }} "
+          cd ${{ env.APP_DIR }} && 
+          git pull origin main && 
+          npm i && 
+          npm run build && 
+          pm2 delete all && 
+          pm2 start npm --name "my-nextjs-app" -- start -- --port 8000
+        "
