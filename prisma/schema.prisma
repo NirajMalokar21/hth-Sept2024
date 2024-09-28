@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Node {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  requires    Requires[] @relation("NodeRequiresPreReqNode")
+  requiredBy  Requires[] @relation("PreReqNodeRequiredByNode")
+  hadBy         Has[]      @relation("ThemeHasNode")
+  completedBy  Completed[] @relation("UserCompletedNode")
+
+  @@map("nodes")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  follows     Follows[] @relation("UserFollowsTheme")
+  completed   Completed[] @relation("UserCompletedNode")
+
+  @@map("users")
+}
+
+model Theme {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  has         Has[]      @relation("ThemeHasNode")
+  followedBy  Follows[]  @relation("UserFollowsTheme")
+
+  @@map("themes")
+}
+
+model Requires {
+  node_id         Int
+  pre_req_node_id Int
+  Node            Node @relation("PreReqNodeRequiredByNode", fields: [node_id], references: [id])
+  PreReqNode      Node @relation("NodeRequiresPreReqNode", fields: [pre_req_node_id], references: [id])
+
+  @@id([node_id, pre_req_node_id])
+  @@map("requires")
+}
+
+model Has {
+  theme_id Int
+  node_id  Int
+  Theme    Theme @relation("ThemeHasNode", fields: [theme_id], references: [id])
+  Node     Node  @relation("ThemeHasNode", fields: [node_id], references: [id])
+
+  @@id([theme_id, node_id])
+  @@map("has")
+}
+
+model Follows {
+  user_id  Int
+  theme_id Int
+  User     User  @relation("UserFollowsTheme", fields: [user_id], references: [id])
+  Theme    Theme @relation("UserFollowsTheme", fields: [theme_id], references: [id])
+
+  @@id([user_id, theme_id])
+  @@map("follows")
+}
+
+model Completed {
+  user_id Int
+  node_id Int
+  grade   Int
+  User    User @relation("UserCompletedNode", fields: [user_id], references: [id])
+  Node    Node @relation("UserCompletedNode", fields: [node_id], references: [id])
+
+  @@id([user_id, node_id])
+  @@map("completed")
+}
