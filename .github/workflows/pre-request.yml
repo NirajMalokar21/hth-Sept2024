@@ -64,7 +64,7 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Install dependencies
-              run: npm ci && npm install --save-dev ts-jest
+              run: npm ci && npm install --save-dev ts-jest @types/jest
 
             - name: Run Jest browser tests
               run: npx jest --config jest.browser.config.js --runInBand
