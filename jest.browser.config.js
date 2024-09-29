@@ -1,19 +1,16 @@
 module.exports = {
-    preset: "ts-jest", // Use ts-jest preset for TypeScript
+    preset: "ts-jest", // Use ts-jest to handle TypeScript and JSX
     testEnvironment: "jest-environment-jsdom",
     setupFilesAfterEnv: ["@testing-library/jest-dom"],
     transform: {
-        "^.+\\.(ts|tsx)$": "babel-jest", // Tell Jest to use Babel for .ts/.tsx files
+        "^.+\\.(ts|tsx)$": "ts-jest", // Use ts-jest to transpile TypeScript and JSX
     },
     moduleNameMapper: {
         "\\.(css|less|scss|sass)$": "identity-obj-proxy", // Mock CSS imports
-        "^@/(.*)$": "<rootDir>/$1", // This maps @ to your project's root directory
+        "^@/(.*)$": "<rootDir>/$1", // Map @ to project root directory
     },
     testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
-    collectCoverage: true, // Enable code coverage
-    collectCoverageFrom: [
-        "src/**/*.{js,jsx,ts,tsx}", // Specify files to collect coverage from
-        "!src/**/*.d.ts", // Ignore TypeScript declaration files
-    ],
-    testMatch: ["<rootDir>/__tests__/components/**/*.test.(ts|tsx|js|jsx)"],
+    collectCoverage: true,
+    collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+    testMatch: ["<rootDir>/components/ui/__tests__/*.test.tsx"],
 };

@@ -3,7 +3,7 @@ module.exports = {
     testEnvironment: "node",
     setupFilesAfterEnv: ["@testing-library/jest-dom"],
     transform: {
-        "^.+\\.(ts|tsx)$": "babel-jest", // Tell Jest to use Babel for .ts/.tsx files
+        "^.+\\.(ts|tsx)$": "ts-jest", // Tell Jest to use typescript for .ts/.tsx files
     },
     moduleNameMapper: {
         "\\.(css|less|scss|sass)$": "identity-obj-proxy", // Mock CSS imports
