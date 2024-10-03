@@ -1,0 +1,45 @@
+name: Deploy to EC2
+
+on:
+    push:
+        branches: ["main"]
+
+env:
+    EC2_HOST: 18.234.111.33
+    EC2_USER: ubuntu
+    APP_DIR: /home/ubuntu/hth-Sept2024
+
+permissions:
+    contents: read
+
+jobs:
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        environment: production
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup SSH
+              uses: webfactory/ssh-agent@v0.5.3
+              with:
+                  ssh-private-key: |
+                      ${{ secrets.EC2_SSH_KEY }}
+
+            - name: Check added keys
+              run: ssh-add -l
+
+            - name: Deploy to EC2
+              run: |
+                  ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_HOST }} "
+                    cd ${{ env.APP_DIR }} &&
+                    git fetch origin && 
+                    git reset --hard origin/main && 
+                    docker stop raven-map || true && 
+                    docker rm raven-map || true &&       
+                    docker rmi raven-map || true && 
+                    docker build -t raven-map . && 
+                    docker run -d -p 8000:8000 --name raven-map raven-map  # Run the new container in detached mode, binding port 8000
+                  "
